@@ -23,7 +23,7 @@ impl MhyModule for MhyContext<CcpBlocker> {
         Ok(())
     }
 
-    fn get_module_type(&self) -> super::ModuleType {
+    fn get_module_type(&self) -> ModuleType {
         ModuleType::CcpBlocker
     }
 }
