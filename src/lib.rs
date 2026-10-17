@@ -1,9 +1,6 @@
-#![feature(str_from_utf16_endian)]
-
 use std::{sync::RwLock};
 
 use lazy_static::lazy_static;
-use modules::{CcpBlocker, Misc};
 use windows::Win32::System::Console;
 use windows::Win32::System::SystemServices::DLL_PROCESS_ATTACH;
 use windows::Win32::{Foundation::HINSTANCE, System::LibraryLoader::GetModuleFileNameA};
@@ -15,7 +12,8 @@ mod marshal;
 mod modules;
 mod util;
 
-use crate::modules::{Http, MhyContext, ModuleManager, Security};
+use crate::modules::{MhyContext, ModuleManager,
+                     CcpBlocker, Http, Misc, Security, WinHttp};
 
 unsafe fn thread_func() {
     let mut module_manager = MODULE_MANAGER.write().unwrap();
@@ -26,7 +24,7 @@ unsafe fn thread_func() {
     util::disable_memprotect_guard();
     Console::AllocConsole().unwrap();
 
-    println!("Genshin Impact encryption patch\nMade by xeondev\n(Modded for all version >= 6.5)");
+    println!("Genshin Impact encryption patch\nMade by xeondev, modified by Kitsxki_\n(Modded for all version >= 6.5)");
 
     let mut buffer = [0u8; 260];
     GetModuleFileNameA(None, &mut buffer);
@@ -45,6 +43,7 @@ unsafe fn thread_func() {
     marshal::find();
     module_manager.enable(MhyContext::<Http>::new(&exe_name));
     module_manager.enable(MhyContext::<Misc>::new(&exe_name));
+    module_manager.enable(MhyContext::<WinHttp>::new(&exe_name));
 
     println!("Successfully initialized!");
 }
