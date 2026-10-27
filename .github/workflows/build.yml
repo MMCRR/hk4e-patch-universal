@@ -13,7 +13,7 @@ permissions:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     steps:
       - name: Checkout
@@ -31,7 +31,7 @@ jobs:
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: rust-release
-          path: target/release/
+          name: release
+          path: target/release/*.dll
           if-no-files-found: error
           retention-days: 14
